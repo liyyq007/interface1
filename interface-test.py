@@ -80,19 +80,19 @@ for i in range(1,nrows):#遍历
 
 
         if leixing =='get':
-            response = s.get(url, params=paramsdict,headers=send_headers_dict)
+            response = s.get(url, params=paramsdict,headers=send_headers_dict,timeout=2)
             apicontent = response.text
 
         elif leixing=='post':
-            response = s.post(url, data=paramsdict, headers=send_headers_dict)
+            response = s.post(url, data=paramsdict, headers=send_headers_dict,timeout=2)
             apicontent = response.text
 
         elif leixing=='put':
-            response = s.post(url, data=paramsdict, headers=send_headers_dict)
+            response = s.post(url, data=paramsdict, headers=send_headers_dict,timeout=2)
             apicontent = response.text
 
         elif leixing=='delete':
-            response = s.post(url, data=paramsdict, headers=send_headers_dict)
+            response = s.post(url, data=paramsdict, headers=send_headers_dict,timeout=2)
             apicontent = response.text
 
             # print apicontent
@@ -108,22 +108,15 @@ for i in range(1,nrows):#遍历
         # logging.debug(unicode(response.json()).decode("unicode-escape").encode("utf-8").replace("u\'","\'"))
         # print response.text['status']
         # print response.status_code
+        # print type(apicontent)
         logging.debug(apicontent)
 
-
-        # url2 = urllib2.Request(url=url, data=paramsdict, headers=send_headers_dict)
-        # url2 = urllib2.Request(url=url,data=paramsdict,headers=send_headers_dict)
-        # # url2.add_header(send_headers.send_headerssplit(":")[0],send_headers.split(":")[1])
-        # response = urllib2.urlopen(url2)
-        # apicontent = response.read()
-        # # apicontent = json.dumps(apicontent)
-        # apicontent = json.dumps(apicontent).decode("unicode-escape")
-        # print 'apicontent',apicontent
 
 
     except Exception as e:
 
-        print e
+        # print e
+        raw_input('%s'%e)
         # print apicontent
 
     # logging.debug(apicontent)
@@ -146,6 +139,7 @@ for i in range(1,nrows):#遍历
                 "apicontent": apicontent
             }
     rightside.append(rs_data)
+
 
     try:
         if cmp(response.json()['msg'], result) == 0:
@@ -173,7 +167,6 @@ for i in range(1,nrows):#遍历
     rst_data.append(data)
 
 logging.debug('result:%s'%rs_data)
-
 
 app = Flask(__name__)
 @app.route('/', methods=['GET', 'POST'])

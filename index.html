@@ -6,15 +6,61 @@
   <link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
   <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
   <script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
-  
+  <script>
+		function syntaxHighlight(json) { 
+			if (typeof json != 'string') {
+				json = JSON.stringify(json, undefined, 2); 
+			}
+			json = json.replace(/&/g, '&').replace(/</g, '<').replace(/>/g, '>'); 
+			return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function(match) { 
+				var cls = 'number'; 
+				if (/^"/.test(match)) { 
+					if (/:$/.test(match)) { 
+						cls = 'key'; 
+					} else { 
+						cls = 'string'; 
+					} 
+				} else if (/true|false/.test(match)) {
+					cls = 'boolean'; 
+				} else if (/null/.test(match)) { 
+					cls = 'null'; 
+				}
+				return '<span class="' + cls + '">' + match + '</span>'; 
+			}); 
+		}
+		
+		$('#result').html(syntaxHighlight(res));
+
+
+      $(function () {
+        $(window).scroll(function () {
+          if ($(this).scrollTop() != 0) {
+            $("#toTop").fadeIn();
+          } else {
+            $("#toTop").fadeOut();
+          }
+        });
+        $("body").append("<div id=\"toTop\" style=\"border:1px solid #444;background:#333;color:#fff;text-align:center;padding:10px 13px 7px 13px;position:fixed;bottom:10px;right:10px;cursor:pointer;display:none;font-family:verdana;font-size:22px;\">^</div>");
+        $("#toTop").click(function () {
+          $("body,html").animate({scrollTop: 0}, 800);
+        });
+      });
+    </script>
+	<style>
+			pre {outline: 0px solid #ccc; padding: 5px; margin: 5px; }
+			.string { color: green; }
+			.number { color: darkorange; }
+			.boolean { color: blue; }
+			.null { color: magenta; }
+			.key { color: red; }
+	</style>
 </head>
 <body>
 <div class="container">
   <div class="row">
     <div class="page-header">
-      <h1>金融客二期后端分配逻辑接口测试报告
-        
-      </h1>
+      <img width="100" src="https://www.bkjk.com/images/m/top-logo.png"  alt="" />
+	  <h1 style="display: inline;">&nbsp&nbsp&nbsp;自动化接口测试报告</h1><h3 style="display: inline;"></h5>
     </div>
   </div>
   <div class="row">
@@ -35,17 +81,13 @@
   
   <div class="row">
     <div class="col-md-3">
-      <ul class="list-group">
-	  
-		
+      <ul class="list-group">	  
         {% for ls in leftside %}
           <li class="list-group-item"><a href="#{{ ls.code }}">{{ ls.code }} -- {{ ls.title }}  </a></li>
         {% endfor %}
-		
       </ul>
     </div>
-    <div class="col-md-9">
-      
+    <div class="col-md-9">     
       {% for x in rst_data %}
 	    {{ x.result }}
         <div class="panel-group" id="accordion">
@@ -56,8 +98,7 @@
           <div class="panel panel-danger">
         {% elif x.result == 'no except result' %}
           <div class="panel panel-warning">
-        {% endif %}
-        		
+        {% endif %}       		
       <div class="panel-heading">
         <h4 class="panel-title">
           <a  data-toggle="collapse" data-parent="#accordion" 
@@ -70,15 +111,11 @@
         <div class="panel-body">
           <b>{{ x.sendData.fssj }}</b><br>
           测试标题：{{ x.sendData.csbt }}<br>
-          method：{{ x.sendData.fsfs }}<br>
-        
-          URL地址：{{ x.sendData.fsdz }}<br>
-		  
-          <td width="200" style="word-break:break-all;">发送参数：{{ x.sendData.fscs }}</td><br/>
-		  
+          method：{{ x.sendData.fsfs }}<br>     
+          URL地址：{{ x.sendData.fsdz }}<br>		  
+          <td width="200" style="word-break:break-all;">发送参数：{{ x.sendData.fscs }}</td><br/>	  
           <hr>
-          响应结果：{{ x.sendData.apicontent }}<br>
-          
+          响应结果：<pre id="result">{{ x.sendData.apicontent }}</pre><br>         
         </div>
       </div>
       </div>
@@ -89,20 +126,7 @@
       </div>
 	  </div>
     </div>
-    <script>
-      $(function () {
-        $(window).scroll(function () {
-          if ($(this).scrollTop() != 0) {
-            $("#toTop").fadeIn();
-          } else {
-            $("#toTop").fadeOut();
-          }
-        });
-        $("body").append("<div id=\"toTop\" style=\"border:1px solid #444;background:#333;color:#fff;text-align:center;padding:10px 13px 7px 13px;position:fixed;bottom:10px;right:10px;cursor:pointer;display:none;font-family:verdana;font-size:22px;\">^</div>");
-        $("#toTop").click(function () {
-          $("body,html").animate({scrollTop: 0}, 800);
-        });
-      });
-    </script>
+	
+    
 </body>
 </html>
